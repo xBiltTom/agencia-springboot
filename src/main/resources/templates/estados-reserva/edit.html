@@ -14,7 +14,7 @@
             <nav aria-label="breadcrumb">
               <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
                 <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Pages</a></li>
-                <li class="breadcrumb-item text-sm text-dark active" aria-current="page"><a th:href="@{/clientes}">Clientes</a></li>
+                <li class="breadcrumb-item text-sm text-dark active" aria-current="page"><a th:href="@{/estados}">Estados-Reserva</a></li>
                 <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Editar</li>
               </ol>
             </nav>
@@ -24,9 +24,9 @@
         <div class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
             <div class="row">
               <div class="ms-3">
-                <h3 class="mb-0 h4 font-weight-bolder">Clientes</h3>
+                <h3 class="mb-0 h4 font-weight-bolder">Estados</h3>
                 <p class="mb-4">
-                  Editar un cliente ...
+                  Tipos de estado de una reserva
                 </p>
               </div>
             </div>
@@ -38,51 +38,22 @@
                 <div class="card my-4">
                   <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                     <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-                      <h6 class="text-white text-capitalize ps-3">Editando el cliente</h6>
+                      <h6 class="text-white text-capitalize ps-3">Editando el estado</h6>
                     </div>
                   </div>
                   <div class="card-body px-4 pb-2">
-                    <form id="formularioCliente" th:action="@{/clientes/guardar}" th:object="${cliente}" method="post">
-                        <!-- DNI (ID) -->
-
-                        
-                          <input type="hidden" th:field="*{id}" class="form-control" maxlength="8" required pattern="[0-9]{8}" title="El DNI debe tener 8 dígitos numéricos">
-                       
-                        
-                        <!-- Nombre -->
+                    <form id="formulario" th:action="@{/estados/guardar}" th:object="${estado}" method="post">
+                        <!-- Descripción del estado -->
+                         <input type="hidden" th:field="*{id}" class="form-control" >
                         <div class="input-group input-group-outline my-3 is-filled">
-                          <label class="form-label">Nombre</label>
-                          <input type="text" th:field="*{nombre}" class="form-control" maxlength="30" required>
+                          <label class="form-label">Descripción</label>
+                          <input type="text" th:field="*{descripcion}" class="form-control" maxlength="50" required>
                         </div>
                         
-                        <!-- Apellido -->
-                        <div class="input-group input-group-outline my-3 is-filled">
-                          <label class="form-label">Apellido</label>
-                          <input type="text" th:field="*{apellido}" class="form-control" maxlength="30" required>
-                        </div>
-                        
-                        <!-- Email -->
-                        <div class="input-group input-group-outline my-3 is-filled">
-                          <label class="form-label">Email</label>
-                          <input type="email" th:field="*{email}" class="form-control" maxlength="50" required>
-                        </div>
-                        
-                        <!-- Teléfono -->
-                        <div class="input-group input-group-outline my-3 is-filled">
-                          <label class="form-label">Teléfono</label>
-                          <input type="tel" th:field="*{telefono}" class="form-control" maxlength="9" required pattern="[0-9]{9}" title="El teléfono debe tener 9 dígitos numéricos">
-                        </div>
-                        
-                        <!-- Dirección -->
-                        <div class="input-group input-group-outline my-3 is-filled">
-                          <label class="form-label">Dirección</label>
-                          <input type="text" th:field="*{direccion}" class="form-control" maxlength="60" required>
-                        </div>
-                        
-                        <!-- Botones -->
+                        <!-- Botones de acción -->
                         <div class="text-end">
-                          <a th:href="@{/clientes}" class="btn btn-outline-secondary me-2">Cancelar</a>
-                          <button type="submit" class="btn bg-gradient-primary">Guardar</button>
+                          <a th:href="@{/estados}" class="btn btn-outline-secondary me-2">Cancelar</a>
+                          <button type="submit" class="btn bg-gradient-primary">Actualizar</button>
                         </div>
                       </form>
                   </div>
@@ -90,6 +61,9 @@
               </div>
             </div>
           </div>
+          
+      
+
       </main>
 
       <!--   Core JS Files   -->
@@ -99,12 +73,14 @@
   <script src="../assets/js/plugins/smooth-scrollbar.min.js"></script>
   <script src="../assets/js/plugins/chartjs.min.js"></script>
   <script>
-    document.getElementById('formularioCliente').addEventListener('submit', function(event) {
-    event.preventDefault(); 
+    document.getElementById('formulario').addEventListener('submit', function(event) {
+    event.preventDefault();
+    
     const form = this; 
+  
     Swal.fire({
-        title: "¿Confirmar actualizacion?",
-        text: "¿Estás seguro de editar este cliente?",
+        title: "¿Confirmar registro?",
+        text: "¿Estás seguro de actualizar este tipo de estado?",
         icon: "question",
         showCancelButton: true,
         confirmButtonColor: "#3085d6",

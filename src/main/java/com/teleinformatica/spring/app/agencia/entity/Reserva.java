@@ -1,6 +1,7 @@
 package com.teleinformatica.spring.app.agencia.entity;
 
 import java.sql.Date;
+import java.util.List;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,6 +11,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
@@ -42,6 +44,18 @@ public class Reserva {
     @ManyToOne
     @JoinColumn(name = "viaje_id",nullable = false)
     private Viaje viaje;
+
+    @Transient // No se persiste en la base de datos
+    private List<Seguro> seguros;
+    
+    // Getters y setters
+    public List<Seguro> getSeguros() {
+        return seguros;
+    }
+    
+    public void setSeguros(List<Seguro> seguros) {
+        this.seguros = seguros;
+    }
 
     public Reserva(){
         super();

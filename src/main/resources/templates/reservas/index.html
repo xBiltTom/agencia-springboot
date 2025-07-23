@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="layout/plantilla :: head">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <aside th:replace="layout/plantilla :: aside"></aside>
+    <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
+        <!-- Navbar -->
+        <nav class="navbar navbar-main navbar-expand-lg px-0 mx-3 shadow-none border-radius-xl" id="navbarBlur" data-scroll="true">
+          <div class="container-fluid py-1 px-3">
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
+                <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Pages</a></li>
+                <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Reservas</li>
+              </ol>
+            </nav>
+          </div>
+        </nav>
+        <!-- End Navbar -->
+        <div class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
+            <div class="row">
+              <div class="ms-3">
+                <h3 class="mb-0 h4 font-weight-bolder">Reservas</h3>
+                <p class="mb-4">
+                  Se listan todos las reservas registradas
+                </p>
+              </div>
+            </div>
+          </div>
+
+        <div class="container-fluid py-2">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card my-4">
+                        <div class="bg-gradient-dark shadow-dark border-radius-lg pt-4 pb-3">
+                            <div class="d-flex justify-content-between align-items-center px-3">
+                            <h6 class="text-white text-capitalize mb-0">Tabla de reservas</h6>
+                            <a class="btn btn-outline-light btn-sm mb-0" th:href="@{/reservas/nuevo}">Agregar reserva</a>
+                            </div>
+                        </div>
+                        <div class="card-body px-0 pb-2">
+                            <div class="table-responsive p-0">
+                                <table id="tablaReservas" class="table align-items-center mb-0">
+                                  <thead>
+                                    <tr>
+                                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">ID/Fecha</th>
+                                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Cliente</th>
+                                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Viaje</th>
+                                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Estado</th>
+                                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Agente</th>
+                                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Acciones</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <tr th:each="reserva : ${reservas}">
+                                      <!-- ID y Fecha -->
+                                      <td>
+                                        <div class="d-flex px-2 py-1">
+                                          <div class="d-flex flex-column justify-content-center">
+                                            <h6 class="mb-0 text-sm" th:text="${'#' + reserva.id}"></h6>
+                                            <p class="text-xs text-secondary mb-0" th:text="${#dates.format(reserva.fechaReserva, 'dd/MM/yyyy')}"></p>
+                                          </div>
+                                        </div>
+                                      </td>
+                                      
+                                      <!-- Cliente -->
+                                      <td>
+                                        <div class="d-flex px-2 py-1">
+                                          <div class="d-flex flex-column justify-content-center">
+                                            <h6 class="mb-0 text-sm" th:text="${reserva.cliente.nombre + ' ' + reserva.cliente.apellido}"></h6>
+                                            <p class="text-xs text-secondary mb-0" th:text="${'DNI: ' + reserva.cliente.id}"></p>
+                                          </div>
+                                        </div>
+                                      </td>
+                                      
+                                      <!-- Viaje -->
+                                      <td>
+                                        <div class="d-flex px-2 py-1">
+                                          <div class="d-flex flex-column justify-content-center">
+                                            <h6 class="mb-0 text-sm" th:text="${reserva.viaje.destino}"></h6>
+                                            <p class="text-xs text-secondary mb-0" th:text="${#dates.format(reserva.viaje.fechaSalida, 'dd/MM/yyyy')}"></p>
+                                          </div>
+                                        </div>
+                                      </td>
+                                      
+                                      <!-- Estado -->
+                                      <td>
+                                        <span class="badge badge-sm" 
+                                              th:classappend="${
+                                                reserva.estadoReserva.descripcion == 'Confirmada' ? 'bg-gradient-success' : 
+                                                (reserva.estadoReserva.descripcion == 'Pendiente' ? 'bg-gradient-warning' : 
+                                                (reserva.estadoReserva.descripcion == 'Cancelada' ? 'bg-gradient-danger' : 'bg-gradient-info'))
+                                              }"
+                                              th:text="${reserva.estadoReserva.descripcion}">
+                                        </span>
+                                      </td>
+                                      
+                                      <!-- Empleado/Agente -->
+                                      <td>
+                                        <p class="text-xs font-weight-bold mb-0" th:text="${reserva.empleado.nombre + ' ' + reserva.empleado.apellido}"></p>
+                                      </td>
+                                      
+                                      <!-- Acciones -->
+                                      <td class="align-middle text-center">
+                                        <a th:href="@{/reservas/detalle/} + ${reserva.id}" class="btn btn-sm bg-gradient-info mb-0" data-toggle="tooltip" data-original-title="Ver detalles">
+                                          <i class="material-symbols-rounded text-sm">visibility</i>
+                                        </a>
+                                      </td>
+                                    </tr>
+                                    <tr th:if="${#lists.isEmpty(reservas)}">
+                                      <td colspan="6" class="text-center">No hay reservas registradas</td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                             
+                                <nav th:unless="${#lists.isEmpty(reservas)}" aria-label="Page navigation" class="mt-4">
+                                  <ul class="pagination justify-content-center">
+                                    <li class="page-item" th:class="${currentPage == 0 ? 'disabled page-item' : 'page-item'}">
+                                      <a class="page-link" th:href="@{/reservas(page=0)}">Primera</a>
+                                    </li>
+                                    <li class="page-item" th:class="${currentPage == 0 ? 'disabled page-item' : 'page-item'}">
+                                      <a class="page-link" th:href="@{/reservas(page=${currentPage - 1})}" aria-label="Anterior">
+                                        <span aria-hidden="true">&laquo;</span>
+                                      </a>
+                                    </li>
+                                    <li th:each="i: ${#numbers.sequence(0, totalPages - 1)}" 
+                                        th:class="${currentPage == i ? 'active page-item' : 'page-item'}"
+                                        th:if="${i >= currentPage - 2 && i <= currentPage + 2}">
+                                      <a class="page-link" th:href="@{/reservas(page=${i})}" th:text="${i + 1}"></a>
+                                    </li>
+                                    <li class="page-item" th:class="${currentPage == totalPages - 1 ? 'disabled page-item' : 'page-item'}">
+                                      <a class="page-link" th:href="@{/reservas(page=${currentPage + 1})}" aria-label="Siguiente">
+                                        <span aria-hidden="true">&raquo;</span>
+                                      </a>
+                                    </li>
+                                    <li class="page-item" th:class="${currentPage == totalPages - 1 ? 'disabled page-item' : 'page-item'}">
+                                      <a class="page-link" th:href="@{/reservas(page=${totalPages - 1})}">Última</a>
+                                    </li>
+                                  </ul>
+                                </nav>
+                                
+                              </div>
+                          </div>
+                    </div>
+                   
+                </div>
+            </div>
+        </div>
+      
+
+      </main>
+
+      <!--   Core JS Files   -->
+  <script src="../assets/js/core/popper.min.js"></script>
+  <script src="../assets/js/core/bootstrap.min.js"></script>
+  <script src="../assets/js/plugins/perfect-scrollbar.min.js"></script>
+  <script src="../assets/js/plugins/smooth-scrollbar.min.js"></script>
+  <script src="../assets/js/plugins/chartjs.min.js"></script>
+
+  <script th:if="${success}">
+    const Toast = Swal.mixin({
+      toast: true,
+      position: "top-end",
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.onmouseenter = Swal.stopTimer;
+        toast.onmouseleave = Swal.resumeTimer;
+      }
+    });
+    
+    Toast.fire({
+      icon: "success",
+      title: "[[${success}]]"
+    });
+  </script>
+
+  
+  <!-- Github buttons -->
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+  <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
+  <script src="../assets/js/material-dashboard.min.js?v=3.2.0"></script>
+      
+</body>
+</html>
